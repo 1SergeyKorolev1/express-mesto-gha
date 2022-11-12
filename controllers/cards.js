@@ -6,7 +6,7 @@ module.exports.postCard = (req, res) => {
   //console.log(name, link); - с этим вариантом тоже работает. оставил тот чтоб не забыть
 
   CardShema.create({...req.body, owner: req.user._id, createdAt: new Date()})
-    .then((data) => res.status(201).send(data))
+    .then((data) => res.status(200).send(data))
     .catch((err) => {
       console.log(err);
       if(err.name === "ValidationError") {

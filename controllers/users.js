@@ -25,7 +25,7 @@ module.exports.getUser = (req, res) => {
 // Создаем пользователя
 module.exports.postUser = (req, res) => {
   UserShema.create(req.body)
-    .then((data) => res.status(201).send(data))
+    .then((data) => res.status(200).send(data))
     .catch((err) => {
       console.log(err);
       if(err.name === "ValidationError") {
@@ -49,7 +49,7 @@ module.exports.patchUser = (req, res) => {
       runValidators: true
     }
   )
-    .then((data) => res.status(201).send(data))
+    .then((data) => res.status(200).send(data))
     .catch((err) => {
       if(err.name === "ValidationError") {
         res.status(400).send({message: "Переданы некорректные данные при обновлении профиля."});
@@ -73,7 +73,7 @@ module.exports.patchAvatar = (req, res) => {
       runValidators: true
     }
   )
-    .then((data) => res.status(201).send(data))
+    .then((data) => res.status(200).send(data))
     .catch((err) => {
       if(err.name === "ValidationError") {
         res.status(400).send({message: "Переданы некорректные данные при обновлении аватара."});
