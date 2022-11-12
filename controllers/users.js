@@ -12,12 +12,20 @@ module.exports.getUser = (req, res) => {
   const userId = req.params.userId;
 
   UserShema.find({ _id: userId })
-    .then((data) => res.status(200).send(data))
+    .then((data) => {
+      if(data.length === 0) {
+        return Promise.reject(new Error("errorId"));
+      } else {
+        res.status(200).send(data);
+      }
+    })
     .catch((err) => {
       if(err.name === "CastError") {
+        res.status(400).send({message: "Передан некоректный _id."})
+      } else if(err.name === "Error") {
         res.status(404).send({message: "Пользователь по указанному _id не найден."})
       } else {
-        res.status(500).send(err)
+        res.status(500).send(err);
       }
     });
 };
