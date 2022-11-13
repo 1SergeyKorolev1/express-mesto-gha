@@ -2,9 +2,7 @@ const CardShema = require("../models/card.js");
 
 // Создаем карточку
 module.exports.postCard = (req, res) => {
-  const _id = req.user._id;
-
-  CardShema.create({...req.body, owner: _id })
+  CardShema.create({...req.body, owner: req.user })
     .then((data) => res.status(200).send(data))
     .catch((err) => {
       console.log(err);

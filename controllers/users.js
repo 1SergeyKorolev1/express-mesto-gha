@@ -11,9 +11,7 @@ module.exports.getUsers = (req, res) => {
 module.exports.getUser = (req, res) => {
   const userId = req.params.userId;
 
-  UserShema.find({ _id: userId },{
-    runValidators: true
-  })
+  UserShema.findById(userId)
     .then((data) => {
       if(data.length === 0) {
         return Promise.reject(new Error("errorId"));
