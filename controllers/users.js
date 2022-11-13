@@ -13,7 +13,7 @@ module.exports.getUser = (req, res) => {
 
   UserShema.findById(userId)
     .then((data) => {
-      if(data.length === 0) {
+      if(data === null) {
         return Promise.reject(new Error("errorId"));
       } else {
         res.status(200).send(data);
