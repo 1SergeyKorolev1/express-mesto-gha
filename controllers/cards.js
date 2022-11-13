@@ -25,13 +25,15 @@ module.exports.deleteCard = (req, res) => {
   CardShema.findByIdAndRemove(req.params.cardId)
     .then((data) => {
       if(data === null) {
-        return Promise.reject(new Error("errorId"));
+        const err = new Error("errorId");
+        err.name = "Validate";
+        throw err;
       } else {
         res.status(200).send(data);
       }
     })
     .catch((err) => {
-      if(err.name === "Error") {
+      if(err.name === "Validate") {
         res.status(404).send({message: "Карточка с указанным _id не найдена."});
       } else if(err.name === "CastError") {
         res.status(400).send({message: "Переданы некорректные данные при удалении создании карточки."})
@@ -54,13 +56,15 @@ module.exports.putLike = (req, res) => {
   )
     .then((data) => {
       if(data === null) {
-        return Promise.reject(new Error("errorId"));
+        const err = new Error("errorId");
+        err.name = "Validate";
+        throw err;
       } else {
         res.status(200).send(data);
       }
     })
     .catch((err) => {
-      if(err.name === "Error") {
+      if(err.name === "Validate") {
         res.status(404).send({message: "Передан несуществующий _id карточки."});
       } else if(err.name === "CastError") {
         res.status(400).send({message: "Переданы некорректные данные для постановки лайка."})
@@ -83,7 +87,9 @@ module.exports.deleteLike = (req, res) => {
   )
     .then((data) => {
       if(data === null) {
-        return Promise.reject(new Error("errorId"));
+        const err = new Error("errorId");
+        err.name = "Validate";
+        throw err;
       } else {
         res.status(200).send(data);
       }
@@ -91,7 +97,7 @@ module.exports.deleteLike = (req, res) => {
     .catch((err) => {
       if(err.name === "CastError") {
         res.status(400).send({message: "Переданы некорректные данные для снятия лайка."});
-      } else if(err.name === "Error") {
+      } else if(err.name === "Validate") {
         res.status(404).send({message: "Передан несуществующий _id карточки."})
       } else {
         res.status(500);
