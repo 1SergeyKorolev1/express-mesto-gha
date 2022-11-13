@@ -1,0 +1,16 @@
+{
+  "extends": "airbnb-base",
+  "rules": {
+    "prefer-destructuring": "off",
+    "object-curly-newline": "off",
+    "import/extensions": "off",
+    "comma-dangle": "off",
+    "eol-last": "off",
+    "semi": "off",
+    "keyword-spacing": "off",
+    "quotes": "off",
+    "object-curly-spacing": "off",
+    "no-console": "off",
+    "no-underscore-dangle": ["error", {"allow": ["_id"]}]
+  }
+}

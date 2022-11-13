@@ -1,20 +1,20 @@
 const CardShema = require("../models/card.js");
 
-// TODO: РЕВЬЮ №1. (Чтобы отлавливать ошибку валидации, необходимо добавить опцию,
-// TODO: чтобы данные для обновления валидировались. Нужно исправить здесь и в других местах.)
-// TODO: При добавлении опции {runValidators: true} Не чего не происходит
-// TODO: в eslintrc если убрать quotes вылезет куча ошибок из за скобок 2-ых, а я с ними привык...
+const GOOD_REQUEST = 200;
+const INCORRECT_DATA = 400;
+const SERVER_ERROR = 500;
+const NOT_FOUND = 404;
 
 // Создаем карточку
 module.exports.postCard = (req, res) => {
   CardShema.create({...req.body, owner: req.user })
-    .then((data) => res.status(200).send(data))
+    .then((data) => res.status(GOOD_REQUEST).send(data))
     .catch((err) => {
       console.log(err);
       if(err.name === "ValidationError") {
-        res.status(400).send({message: "Переданы некорректные данные при создании карточки."});
+        res.status(INCORRECT_DATA).send({message: "Переданы некорректные данные при создании карточки."});
       } else {
-        res.status(500).send({message: "Ошибка на сервере"});
+        res.status(SERVER_ERROR).send({message: "Ошибка на сервере"});
         console.log(err);
       }
     });
@@ -29,16 +29,16 @@ module.exports.deleteCard = (req, res) => {
         err.name = "Validate";
         throw err;
       } else {
-        res.status(200).send(data);
+        res.status(GOOD_REQUEST).send(data);
       }
     })
     .catch((err) => {
       if(err.name === "Validate") {
-        res.status(404).send({message: "Карточка с указанным _id не найдена."});
+        res.status(NOT_FOUND).send({message: "Карточка с указанным _id не найдена."});
       } else if(err.name === "CastError") {
-        res.status(400).send({message: "Переданы некорректные данные при удалении создании карточки."})
+        res.status(INCORRECT_DATA).send({message: "Переданы некорректные данные при удалении создании карточки."})
       } else {
-        res.status(500).send({message: "Ошибка на сервере"});
+        res.status(SERVER_ERROR).send({message: "Ошибка на сервере"});
         console.log(err);
       }
     });
@@ -60,16 +60,16 @@ module.exports.putLike = (req, res) => {
         err.name = "Validate";
         throw err;
       } else {
-        res.status(200).send(data);
+        res.status(GOOD_REQUEST).send(data);
       }
     })
     .catch((err) => {
       if(err.name === "Validate") {
-        res.status(404).send({message: "Передан несуществующий _id карточки."});
+        res.status(NOT_FOUND).send({message: "Передан несуществующий _id карточки."});
       } else if(err.name === "CastError") {
-        res.status(400).send({message: "Переданы некорректные данные для постановки лайка."})
+        res.status(INCORRECT_DATA).send({message: "Переданы некорректные данные для постановки лайка."})
       } else {
-        res.status(500).send({message: "Ошибка на сервере"});
+        res.status(SERVER_ERROR).send({message: "Ошибка на сервере"});
         console.log(err);
       }
     });
@@ -91,16 +91,16 @@ module.exports.deleteLike = (req, res) => {
         err.name = "Validate";
         throw err;
       } else {
-        res.status(200).send(data);
+        res.status(GOOD_REQUEST).send(data);
       }
     })
     .catch((err) => {
       if(err.name === "CastError") {
-        res.status(400).send({message: "Переданы некорректные данные для снятия лайка."});
+        res.status(INCORRECT_DATA).send({message: "Переданы некорректные данные для снятия лайка."});
       } else if(err.name === "Validate") {
-        res.status(404).send({message: "Передан несуществующий _id карточки."})
+        res.status(NOT_FOUND).send({message: "Передан несуществующий _id карточки."})
       } else {
-        res.status(500).send({message: "Ошибка на сервере"});
+        res.status(SERVER_ERROR).send({message: "Ошибка на сервере"});
         console.log(err);
       }
     });
@@ -108,11 +108,11 @@ module.exports.deleteLike = (req, res) => {
 
 // Возвращаем все карточки
 module.exports.getCards = (req, res) => {
-  console.log(req.body);
   CardShema.find({})
-    .then((data) => res.status(200).send(data))
+    .populate(["owner", "likes"])
+    .then((data) => res.status(GOOD_REQUEST).send(data))
     .catch((err) => {
-      res.status(500).send({message: "Ошибка на сервере"});
+      res.status(SERVER_ERROR).send({message: "Ошибка на сервере"});
       console.log(err);
     });
 };

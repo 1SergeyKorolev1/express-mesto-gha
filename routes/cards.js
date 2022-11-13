@@ -16,5 +16,4 @@ router.delete("/:cardId/likes", deleteLike);
 // Возвращаем все карточки
 router.get("/", getCards);
 
-
 module.exports = router;
