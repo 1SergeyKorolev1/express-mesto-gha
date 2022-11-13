@@ -19,10 +19,18 @@ module.exports.postCard = (req, res) => {
 // Удаляем карточку по ид
 module.exports.deleteCard = (req, res) => {
   CardShema.findByIdAndRemove(req.params.cardId)
-    .then((data) => res.status(200).send(data))
+    .then((data) => {
+      if(data === null) {
+        return Promise.reject(new Error("errorId"));
+      } else {
+        res.status(200).send(data);
+      }
+    })
     .catch((err) => {
-      if(err.name === "CastError") {
-        res.status(404).send({message: "Карточка с указанным _id не найдена."})
+      if(err.name === "Error") {
+        res.status(404).send({message: "Карточка с указанным _id не найдена."});
+      } else if(err.name === "CastError") {
+        res.status(400).send({message: "Переданы некорректные данные при удалении создании карточки."})
       } else {
         res.status(500).send(err)
       }
