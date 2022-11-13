@@ -13,7 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/1SergeyKorolev1/express-mesto-gha.git"
   },
-  "author": "",
+  "author": "Sergey Korolev",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/1SergeyKorolev1/express-mesto-gha/issues"

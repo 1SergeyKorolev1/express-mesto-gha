@@ -1,5 +1,9 @@
 const CardShema = require("../models/card.js");
 
+// TODO: РЕВЬЮ №1. (Чтобы отлавливать ошибку валидации, необходимо добавить опцию,
+// TODO: чтобы данные для обновления валидировались. Нужно исправить здесь и в других местах.)
+// TODO: При добавлении опции {runValidators: true} Не чего не происходит
+
 // Создаем карточку
 module.exports.postCard = (req, res) => {
   CardShema.create({...req.body, owner: req.user })
@@ -9,7 +13,8 @@ module.exports.postCard = (req, res) => {
       if(err.name === "ValidationError") {
         res.status(400).send({message: "Переданы некорректные данные при создании карточки."});
       } else {
-        res.status(500).send(err)
+        res.status(500);
+        console.log(err);
       }
     });
 };
@@ -30,7 +35,8 @@ module.exports.deleteCard = (req, res) => {
       } else if(err.name === "CastError") {
         res.status(400).send({message: "Переданы некорректные данные при удалении создании карточки."})
       } else {
-        res.status(500).send(err)
+        res.status(500);
+        console.log(err);
       }
     });
 };
@@ -58,7 +64,8 @@ module.exports.putLike = (req, res) => {
       } else if(err.name === "CastError") {
         res.status(400).send({message: "Переданы некорректные данные для постановки лайка."})
       } else {
-        res.status(500).send(err)
+        res.status(500);
+        console.log(err);
       }
     });
 };
@@ -86,7 +93,8 @@ module.exports.deleteLike = (req, res) => {
       } else if(err.name === "Error") {
         res.status(404).send({message: "Передан несуществующий _id карточки."})
       } else {
-        res.status(500).send(err)
+        res.status(500);
+        console.log(err);
       }
     });
 };
@@ -96,5 +104,8 @@ module.exports.getCards = (req, res) => {
   console.log(req.body);
   CardShema.find({})
     .then((data) => res.status(200).send(data))
-    .catch((err) => res.status(500).send(err));
+    .catch((err) => {
+      res.status(500);
+      console.log(err);
+    });
 };

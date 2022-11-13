@@ -1,17 +1,20 @@
-const UserShema = require("../models/user.js");
+const UserSchema = require("../models/user.js");
 
 // Возвращаем всех пользователей
 module.exports.getUsers = (req, res) => {
-  UserShema.find({})
+  UserSchema.find({})
     .then((data) => res.status(200).send(data))
-    .catch((err) => res.status(500).send(err));
+    .catch((err) => {
+      res.status(500);
+      console.log(err);
+    });
 };
 
 // Возвращаем пользователя по ид
 module.exports.getUser = (req, res) => {
   const userId = req.params.userId;
 
-  UserShema.findById(userId)
+  UserSchema.findById(userId)
     .then((data) => {
       if(data === null) {
         return Promise.reject(new Error("errorId"));
@@ -25,27 +28,29 @@ module.exports.getUser = (req, res) => {
       } else if(err.name === "Error") {
         res.status(404).send({message: "Пользователь по указанному _id не найден."})
       } else {
-        res.status(500).send(err);
+        res.status(500);
+        console.log(err);
       }
     });
 };
 
 // Создаем пользователя
 module.exports.postUser = (req, res) => {
-  UserShema.create(req.body)
+  UserSchema.create(req.body)
     .then((data) => res.status(200).send(data))
     .catch((err) => {
       if(err.name === "ValidationError") {
         res.status(400).send({message: "Переданы некорректные данные при создании пользователя."});
       } else {
-        res.status(500).send(err)
+        res.status(500);
+        console.log(err);
       }
     });
 };
 
 // Обновляем профиль
 module.exports.patchUser = (req, res) => {
-  UserShema.findByIdAndUpdate(
+  UserSchema.findByIdAndUpdate(
     req.user._id,
     {
       name: req.body.name,
@@ -63,14 +68,15 @@ module.exports.patchUser = (req, res) => {
       } else if(err.name === "CastError") {
         res.status(404).send({message: "Пользователь с указанным _id не найден."})
       } else {
-        res.status(500).send(err)
+        res.status(500);
+        console.log(err);
       }
     });
 };
 
 // Обновляем Аватар
 module.exports.patchAvatar = (req, res) => {
-  UserShema.findByIdAndUpdate(
+  UserSchema.findByIdAndUpdate(
     req.user._id,
     {
       avatar: req.body.avatar
@@ -87,7 +93,8 @@ module.exports.patchAvatar = (req, res) => {
       } else if(err.name === "CastError") {
         res.status(404).send({message: "Пользователь с указанным _id не найден."})
       } else {
-        res.status(500).send(err)
+        res.status(500);
+        console.log(err);
       }
     });
 };
