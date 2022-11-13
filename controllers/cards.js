@@ -14,7 +14,7 @@ module.exports.postCard = (req, res) => {
       if(err.name === "ValidationError") {
         res.status(400).send({message: "Переданы некорректные данные при создании карточки."});
       } else {
-        res.status(500);
+        res.status(500).send({message: "Ошибка на сервере"});
         console.log(err);
       }
     });
@@ -38,7 +38,7 @@ module.exports.deleteCard = (req, res) => {
       } else if(err.name === "CastError") {
         res.status(400).send({message: "Переданы некорректные данные при удалении создании карточки."})
       } else {
-        res.status(500);
+        res.status(500).send({message: "Ошибка на сервере"});
         console.log(err);
       }
     });
@@ -69,7 +69,7 @@ module.exports.putLike = (req, res) => {
       } else if(err.name === "CastError") {
         res.status(400).send({message: "Переданы некорректные данные для постановки лайка."})
       } else {
-        res.status(500);
+        res.status(500).send({message: "Ошибка на сервере"});
         console.log(err);
       }
     });
@@ -100,7 +100,7 @@ module.exports.deleteLike = (req, res) => {
       } else if(err.name === "Validate") {
         res.status(404).send({message: "Передан несуществующий _id карточки."})
       } else {
-        res.status(500);
+        res.status(500).send({message: "Ошибка на сервере"});
         console.log(err);
       }
     });
@@ -112,7 +112,7 @@ module.exports.getCards = (req, res) => {
   CardShema.find({})
     .then((data) => res.status(200).send(data))
     .catch((err) => {
-      res.status(500);
+      res.status(500).send({message: "Ошибка на сервере"});
       console.log(err);
     });
 };
