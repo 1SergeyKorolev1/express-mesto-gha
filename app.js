@@ -24,6 +24,12 @@ app.use("/users", require("./routes/users.js"));
 // Все запросы на /cards
 app.use("/cards", require("./routes/cards.js"));
 
+// Не сужествующие запросы
+app.use("/", (req, res) => {
+  res.status(404).send({message: "Такого адреса не сужествует"})
+});
+
+
 app.listen(3000, () => {
   console.log("server started");
 });
