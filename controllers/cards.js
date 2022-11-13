@@ -2,7 +2,9 @@ const CardShema = require("../models/card.js");
 
 // Создаем карточку
 module.exports.postCard = (req, res) => {
-  CardShema.create({...req.body, owner: req.user._id, createdAt: new Date()})
+  const _id = req.user._id;
+
+  CardShema.create({...req.body, owner: _id })
     .then((data) => res.status(200).send(data))
     .catch((err) => {
       console.log(err);
@@ -35,14 +37,20 @@ module.exports.putLike = (req, res) => {
     {
       new: true,
       runValidators: true
-    },
+    }
   )
-    .then((data) => res.status(200).send(data))
+    .then((data) => {
+      if(data === null) {
+        return Promise.reject(new Error("errorId"));
+      } else {
+        res.status(200).send(data);
+      }
+    })
     .catch((err) => {
-      if(err.name === "ValidationError") {
-        res.status(400).send({message: "Переданы некорректные данные для постановки лайка."});
+      if(err.name === "Error") {
+        res.status(404).send({message: "Передан несуществующий _id карточки."});
       } else if(err.name === "CastError") {
-        res.status(404).send({message: "Передан несуществующий _id карточки."})
+        res.status(400).send({message: "Переданы некорректные данные для постановки лайка."})
       } else {
         res.status(500).send(err)
       }
@@ -59,11 +67,17 @@ module.exports.deleteLike = (req, res) => {
       runValidators: true
     },
   )
-    .then((data) => res.status(200).send(data))
+    .then((data) => {
+      if(data === null) {
+        return Promise.reject(new Error("errorId"));
+      } else {
+        res.status(200).send(data);
+      }
+    })
     .catch((err) => {
-      if(err.name === "ValidationError") {
+      if(err.name === "CastError") {
         res.status(400).send({message: "Переданы некорректные данные для снятия лайка."});
-      } else if(err.name === "CastError") {
+      } else if(err.name === "Error") {
         res.status(404).send({message: "Передан несуществующий _id карточки."})
       } else {
         res.status(500).send(err)

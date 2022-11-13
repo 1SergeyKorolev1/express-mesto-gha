@@ -11,7 +11,9 @@ module.exports.getUsers = (req, res) => {
 module.exports.getUser = (req, res) => {
   const userId = req.params.userId;
 
-  UserShema.find({ _id: userId })
+  UserShema.find({ _id: userId },{
+    runValidators: true
+  })
     .then((data) => {
       if(data.length === 0) {
         return Promise.reject(new Error("errorId"));
@@ -35,7 +37,6 @@ module.exports.postUser = (req, res) => {
   UserShema.create(req.body)
     .then((data) => res.status(200).send(data))
     .catch((err) => {
-      console.log(err);
       if(err.name === "ValidationError") {
         res.status(400).send({message: "Переданы некорректные данные при создании пользователя."});
       } else {

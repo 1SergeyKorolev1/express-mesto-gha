@@ -9,7 +9,7 @@ const app = expres();
 // Хардкодим ид пользователя
 app.use((req, res, next) => {
   req.user = {
-    _id: "636ba8441698cf8ab7b1cf1f"
+    _id: "6370dd2a2fa52ebb0cd085ab"
   };
 
   next();
