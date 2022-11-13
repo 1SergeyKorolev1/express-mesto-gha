@@ -2,9 +2,6 @@ const CardShema = require("../models/card.js");
 
 // Создаем карточку
 module.exports.postCard = (req, res) => {
-  //const {name, link} = req.body
-  //console.log(name, link); - с этим вариантом тоже работает. оставил тот чтоб не забыть
-
   CardShema.create({...req.body, owner: req.user._id, createdAt: new Date()})
     .then((data) => res.status(200).send(data))
     .catch((err) => {
@@ -35,7 +32,10 @@ module.exports.putLike = (req, res) => {
   CardShema.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
-    { new: true },
+    {
+      new: true,
+      runValidators: true
+    },
   )
     .then((data) => res.status(200).send(data))
     .catch((err) => {
@@ -54,7 +54,10 @@ module.exports.deleteLike = (req, res) => {
   CardShema.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } }, //  убрать _id из массива
-    { new: true },
+    {
+      new: true,
+      runValidators: true
+    },
   )
     .then((data) => res.status(200).send(data))
     .catch((err) => {
@@ -70,6 +73,7 @@ module.exports.deleteLike = (req, res) => {
 
 // Возвращаем все карточки
 module.exports.getCards = (req, res) => {
+  console.log(req.body);
   CardShema.find({})
     .then((data) => res.status(200).send(data))
     .catch((err) => res.status(500).send(err));
