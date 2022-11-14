@@ -28,14 +28,14 @@ module.exports.deleteCard = (req, res) => {
     .then((data) => {
       if (data === null) {
         const err = new Error('errorId');
-        err.name = 'Validate';
+        err.name = 'ResourceNotFound';
         throw err;
       } else {
         res.status(GOOD_REQUEST).send(data);
       }
     })
     .catch((err) => {
-      if (err.name === 'Validate') {
+      if (err.name === 'ResourceNotFound') {
         res.status(NOT_FOUND).send({ message: 'Карточка с указанным _id не найдена.' });
       } else if (err.name === 'CastError') {
         res.status(INCORRECT_DATA).send({ message: 'Переданы некорректные данные при удалении создании карточки.' });
@@ -59,14 +59,14 @@ module.exports.putLike = (req, res) => {
     .then((data) => {
       if (data === null) {
         const err = new Error('errorId');
-        err.name = 'Validate';
+        err.name = 'ResourceNotFound';
         throw err;
       } else {
         res.status(GOOD_REQUEST).send(data);
       }
     })
     .catch((err) => {
-      if (err.name === 'Validate') {
+      if (err.name === 'ResourceNotFound') {
         res.status(NOT_FOUND).send({ message: 'Передан несуществующий _id карточки.' });
       } else if (err.name === 'CastError') {
         res.status(INCORRECT_DATA).send({ message: 'Переданы некорректные данные для постановки лайка.' });
@@ -90,7 +90,7 @@ module.exports.deleteLike = (req, res) => {
     .then((data) => {
       if (data === null) {
         const err = new Error('errorId');
-        err.name = 'Validate';
+        err.name = 'ResourceNotFound';
         throw err;
       } else {
         res.status(GOOD_REQUEST).send(data);
@@ -99,7 +99,7 @@ module.exports.deleteLike = (req, res) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(INCORRECT_DATA).send({ message: 'Переданы некорректные данные для снятия лайка.' });
-      } else if (err.name === 'Validate') {
+      } else if (err.name === 'ResourceNotFound') {
         res.status(NOT_FOUND).send({ message: 'Передан несуществующий _id карточки.' });
       } else {
         res.status(SERVER_ERROR).send({ message: 'Ошибка на сервере' });

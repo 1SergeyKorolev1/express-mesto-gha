@@ -25,7 +25,7 @@ module.exports.getUser = (req, res) => {
     .then((data) => {
       if (data === null) {
         const err = new Error('errorId');
-        err.name = 'Validate';
+        err.name = 'ResourceNotFound';
         throw err;
       } else {
         res.status(GOOD_REQUEST).send(data);
@@ -34,7 +34,7 @@ module.exports.getUser = (req, res) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(INCORRECT_DATA).send({ message: 'Передан некоректный _id.' });
-      } else if (err.name === 'Validate') {
+      } else if (err.name === 'ResourceNotFound') {
         res.status(NOT_FOUND).send({ message: 'Пользователь по указанному _id не найден.' });
       } else {
         res.status(SERVER_ERROR).send({ message: 'Ошибка на сервере' });
@@ -73,7 +73,7 @@ module.exports.patchUser = (req, res) => {
     .then((data) => {
       if (data === null) {
         const err = new Error('errorId');
-        err.name = 'Validate';
+        err.name = 'ResourceNotFound';
         throw err;
       } else {
         res.status(GOOD_REQUEST).send(data);
@@ -84,7 +84,7 @@ module.exports.patchUser = (req, res) => {
         res.status(INCORRECT_DATA).send({ message: 'Переданы некорректные данные при обновлении профиля.' });
       } else if (err.name === 'CastError') {
         res.status(INCORRECT_DATA).send({ message: 'Переданы некорректные данные при обновлении аватара.Пользователь с указанным _id не найден.' });
-      } else if (err.name === 'Validate') {
+      } else if (err.name === 'ResourceNotFound') {
         res.status(NOT_FOUND).send({ message: 'Пользователь с указанным _id не найден.' });
       } else {
         res.status(SERVER_ERROR).send({ message: 'Ошибка на сервере' });
@@ -108,7 +108,7 @@ module.exports.patchAvatar = (req, res) => {
     .then((data) => {
       if (data === null) {
         const err = new Error('errorId');
-        err.name = 'Validate';
+        err.name = 'ResourceNotFound';
         throw err;
       } else {
         res.status(GOOD_REQUEST).send(data);
@@ -119,7 +119,7 @@ module.exports.patchAvatar = (req, res) => {
         res.status(INCORRECT_DATA).send({ message: 'Переданы некорректные данные при обновлении аватара.' });
       } else if (err.name === 'CastError') {
         res.status(INCORRECT_DATA).send({ message: 'Переданы некорректные данные при обновлении аватара.' });
-      } else if (err.name === 'Validate') {
+      } else if (err.name === 'ResourceNotFound') {
         res.status(NOT_FOUND).send({ message: 'Пользователь с указанным _id не найден.' });
       } else {
         res.status(SERVER_ERROR).send({ message: 'Ошибка на сервере' });
