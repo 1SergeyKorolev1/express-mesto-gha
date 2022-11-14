@@ -3,6 +3,7 @@
 const expres = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const NOT_FOUND = 404;
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
@@ -28,7 +29,7 @@ app.use('/cards', require('./routes/cards.js'));
 
 // Не существующие запросы
 app.use('/', (req, res) => {
-  res.status(404).send({ message: 'Такого адреса не существует' });
+  res.status(NOT_FOUND).send({ message: 'Такого адреса не существует' });
 });
 
 app.listen(3000, () => {
