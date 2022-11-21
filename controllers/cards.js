@@ -6,6 +6,7 @@ const GOOD_REQUEST = 200;
 const INCORRECT_DATA = 400;
 const SERVER_ERROR = 500;
 const NOT_FOUND = 404;
+const UNAUTHORIZED = 401;
 
 // Создаем карточку
 module.exports.postCard = (req, res) => {
@@ -24,18 +25,29 @@ module.exports.postCard = (req, res) => {
 
 // Удаляем карточку по ид
 module.exports.deleteCard = (req, res) => {
-  CardShema.findByIdAndRemove(req.params.cardId)
+  CardShema.findById(req.params.cardId)
+    .orFail(() => {
+      const err = new Error('errorId');
+      err.name = 'ResourceNotFound';
+      throw err;
+    })
+    .populate('owner')
     .then((data) => {
-      if (data === null) {
+      if (req.user._id !== data.owner._id.toString()) {
         const err = new Error('errorId');
-        err.name = 'ResourceNotFound';
+        err.name = 'Unauthorized';
         throw err;
       } else {
-        res.status(GOOD_REQUEST).send(data);
+        CardShema.findByIdAndRemove(req.params.cardId)
+          .then((datas) => {
+            res.status(GOOD_REQUEST).send(datas);
+          });
       }
     })
     .catch((err) => {
-      if (err.name === 'ResourceNotFound') {
+      if (err.name === 'Unauthorized') {
+        res.status(UNAUTHORIZED).send({ message: 'У вас нет прав на удаление этой карточки' });
+      } else if (err.name === 'ResourceNotFound') {
         res.status(NOT_FOUND).send({ message: 'Карточка с указанным _id не найдена.' });
       } else if (err.name === 'CastError') {
         res.status(INCORRECT_DATA).send({ message: 'Переданы некорректные данные при удалении создании карточки.' });
