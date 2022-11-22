@@ -6,7 +6,7 @@ const GOOD_REQUEST = 200;
 const INCORRECT_DATA = 400;
 const SERVER_ERROR = 500;
 const NOT_FOUND = 404;
-const UNAUTHORIZED = 401;
+const UNAUTHORIZED = 403;
 
 // Создаем карточку
 module.exports.postCard = (req, res) => {

@@ -17,7 +17,14 @@ const CONFLICT = 409;
 // Возвращаем всех пользователей
 module.exports.getUsers = (req, res, next) => {
   UserSchema.find({})
-    .then((data) => res.status(GOOD_REQUEST).send(data))
+    .then((data) => {
+      const {
+        email, name, about, avatar,
+      } = data;
+      res.status(GOOD_REQUEST).send({
+        email, name, about, avatar,
+      });
+    })
     .catch((err) => {
       const error = new Error('Ошибка на сервере');
       error.statusCode = SERVER_ERROR;
@@ -177,7 +184,12 @@ module.exports.patchUser = (req, res, next) => {
         err.name = 'ResourceNotFound';
         throw err;
       } else {
-        res.status(GOOD_REQUEST).send(data);
+        const {
+          email, name, about, avatar,
+        } = data;
+        res.status(GOOD_REQUEST).send({
+          email, name, about, avatar,
+        });
       }
     })
     .catch((err) => {
@@ -213,7 +225,12 @@ module.exports.patchAvatar = (req, res, next) => {
         err.name = 'ResourceNotFound';
         throw err;
       } else {
-        res.status(GOOD_REQUEST).send(data);
+        const {
+          email, name, about, avatar,
+        } = data;
+        res.status(GOOD_REQUEST).send({
+          email, name, about, avatar,
+        });
       }
     })
     .catch((err) => {
