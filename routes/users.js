@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 const router = require('express').Router();
 const {
-  getUsers, getUser, patchUser, patchAvatar,
+  getUsers, getUser, patchUser, patchAvatar, getUserMe,
 } = require('../controllers/users.js');
 
 // Возвращаем всех пользователей
@@ -10,6 +10,8 @@ router.get('/', getUsers);
 router.get('/:userId', getUser);
 // Обновляем профиль
 router.patch('/me', patchUser);
+// Возвращаем инфу пользователя
+router.get('/me', getUserMe);
 // Обновляем Аватар
 router.patch('/me/avatar', patchAvatar);
 

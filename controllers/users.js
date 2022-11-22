@@ -25,6 +25,36 @@ module.exports.getUsers = (req, res, next) => {
     });
 };
 
+// Возвращаем пользователя
+module.exports.getUserMe = (req, res, next) => {
+  UserSchema.findById(req.user._id)
+    .then((data) => {
+      if (data === null) {
+        const err = new Error('errorId');
+        err.name = 'ResourceNotFound';
+        throw err;
+      } else {
+        const {
+          email, name, about, avatar,
+        } = data;
+        res.status(GOOD_REQUEST).send({
+          email, name, about, avatar,
+        });
+      }
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(INCORRECT_DATA).send({ message: 'Передан некоректный _id.' });
+      } else if (err.name === 'ResourceNotFound') {
+        res.status(NOT_FOUND).send({ message: 'Пользователь по указанному _id не найден.' });
+      } else {
+        const error = new Error('Ошибка на сервере');
+        error.statusCode = SERVER_ERROR;
+        next(error);
+      }
+    });
+};
+
 // Возвращаем пользователя по ид
 module.exports.getUser = (req, res, next) => {
   const { userId } = req.params;
@@ -36,7 +66,12 @@ module.exports.getUser = (req, res, next) => {
         err.name = 'ResourceNotFound';
         throw err;
       } else {
-        res.status(GOOD_REQUEST).send(data);
+        const {
+          email, name, about, avatar,
+        } = data;
+        res.status(GOOD_REQUEST).send({
+          email, name, about, avatar,
+        });
       }
     })
     .catch((err) => {
