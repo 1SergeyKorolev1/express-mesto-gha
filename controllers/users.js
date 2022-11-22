@@ -18,11 +18,17 @@ const CONFLICT = 409;
 module.exports.getUsers = (req, res, next) => {
   UserSchema.find({})
     .then((data) => {
-      const {
-        email, name, about, avatar,
-      } = data;
+      const users = [];
+      data.forEach((item) => {
+        const {
+          email, name, about, avatar,
+        } = item;
+        users.push({
+          email, name, about, avatar,
+        });
+      });
       res.status(GOOD_REQUEST).send({
-        email, name, about, avatar,
+        users,
       });
     })
     .catch((err) => {
