@@ -65,8 +65,12 @@ module.exports.postUser = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
       .then((hash) => UserSchema.create({ email: req.body.email, password: hash })
         .then((data) => {
-          const { name, about, avatar } = data;
-          res.status(GOOD_REQUEST).send({ name, about, avatar });
+          const {
+            email, name, about, avatar,
+          } = data;
+          res.status(GOOD_REQUEST).send({
+            email, name, about, avatar,
+          });
         })
         .catch((err) => {
           if (err.name === 'ValidationError') {
