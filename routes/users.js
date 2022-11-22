@@ -1,5 +1,6 @@
 /* eslint-disable import/extensions */
 const router = require('express').Router();
+const { celebrate, Joi } = require('celebrate');
 const {
   getUsers, getUser, patchUser, patchAvatar,
 } = require('../controllers/users.js');

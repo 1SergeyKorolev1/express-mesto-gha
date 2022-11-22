@@ -4,6 +4,7 @@
 const expres = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const { celebrate, Joi, errors } = require('celebrate');
 const {
   login, postUser,
 } = require('./controllers/users.js');
@@ -20,7 +21,12 @@ app.use(bodyParser.json());
 
 // Вход(авторизация) и регистрация
 app.post('/signin', login);
-app.post('/signup', postUser);
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().required().min(2).max(30),
+    about: Joi.string().required().min(2).max(30),
+  }).unknown(true),
+}), postUser);
 
 // Аутенфикация
 app.use(auth);
@@ -34,6 +40,8 @@ app.use('/cards', require('./routes/cards.js'));
 app.use('/', (req, res) => {
   res.status(NOT_FOUND).send({ message: 'Такого адреса не существует' });
 });
+
+app.use(errors());
 
 app.use((err, req, res, next) => {
   res.status(err.statusCode).send({ message: err.message });
