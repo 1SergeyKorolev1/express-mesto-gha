@@ -96,9 +96,14 @@ module.exports.postUser = (req, res, next) => {
     error.statusCode = INCORRECT_DATA;
     next(error);
   } else {
-    console.log(req.body.password.length);
     bcrypt.hash(req.body.password, 10)
-      .then((hash) => UserSchema.create({ email: req.body.email, password: hash })
+      .then((hash) => UserSchema.create({
+        avatar: req.body.avatar,
+        about: req.body.about,
+        name: req.body.name,
+        email: req.body.email,
+        password: hash,
+      })
         .then((data) => {
           const {
             email, name, about, avatar,
