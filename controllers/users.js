@@ -45,9 +45,13 @@ module.exports.getUserMe = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(INCORRECT_DATA).send({ message: 'Передан некоректный _id.' });
+        const error = new Error('Передан некоректный _id.');
+        error.statusCode = INCORRECT_DATA;
+        next(error);
       } else if (err.name === 'ResourceNotFound') {
-        res.status(NOT_FOUND).send({ message: 'Пользователь по указанному _id не найден.' });
+        const error = new Error('Пользователь по указанному _id не найден.');
+        error.statusCode = NOT_FOUND;
+        next(error);
       } else {
         const error = new Error('Ошибка на сервере');
         error.statusCode = SERVER_ERROR;
@@ -74,9 +78,13 @@ module.exports.getUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(INCORRECT_DATA).send({ message: 'Передан некоректный _id.' });
+        const error = new Error('Передан некоректный _id.');
+        error.statusCode = INCORRECT_DATA;
+        next(error);
       } else if (err.name === 'ResourceNotFound') {
-        res.status(NOT_FOUND).send({ message: 'Пользователь по указанному _id не найден.' });
+        const error = new Error('Пользователь по указанному _id не найден.');
+        error.statusCode = NOT_FOUND;
+        next(error);
       } else {
         const error = new Error('Ошибка на сервере');
         error.statusCode = SERVER_ERROR;
@@ -146,9 +154,9 @@ module.exports.login = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'Unauthorized') {
-        res
-          .status(UNAUTHORIZED)
-          .send({ message: 'Указаны неправильные почта или пароль!' });
+        const error = new Error('Указаны неправильные почта или пароль!');
+        error.statusCode = UNAUTHORIZED;
+        next(error);
       } else if (err.name === 'UnknownError') {
         const error = new Error('Ошибка на сервере');
         error.statusCode = SERVER_ERROR;
@@ -183,11 +191,17 @@ module.exports.patchUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(INCORRECT_DATA).send({ message: 'Переданы некорректные данные при обновлении профиля.' });
+        const error = new Error('Переданы некорректные данные при обновлении профиля.');
+        error.statusCode = INCORRECT_DATA;
+        next(error);
       } else if (err.name === 'CastError') {
-        res.status(INCORRECT_DATA).send({ message: 'Переданы некорректные данные при обновлении аватара.Пользователь с указанным _id не найден.' });
+        const error = new Error('Переданы некорректные данные при обновлении аватара.Пользователь с указанным _id не найден.');
+        error.statusCode = INCORRECT_DATA;
+        next(error);
       } else if (err.name === 'ResourceNotFound') {
-        res.status(NOT_FOUND).send({ message: 'Пользователь с указанным _id не найден.' });
+        const error = new Error('Пользователь с указанным _id не найден.');
+        error.statusCode = NOT_FOUND;
+        next(error);
       } else {
         const error = new Error('Ошибка на сервере');
         error.statusCode = SERVER_ERROR;
@@ -221,11 +235,17 @@ module.exports.patchAvatar = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(INCORRECT_DATA).send({ message: 'Переданы некорректные данные при обновлении аватара.' });
+        const error = new Error('Переданы некорректные данные при обновлении аватара.');
+        error.statusCode = INCORRECT_DATA;
+        next(error);
       } else if (err.name === 'CastError') {
-        res.status(INCORRECT_DATA).send({ message: 'Переданы некорректные данные при обновлении аватара.' });
+        const error = new Error('Переданы некорректные данные при обновлении аватара.');
+        error.statusCode = INCORRECT_DATA;
+        next(error);
       } else if (err.name === 'ResourceNotFound') {
-        res.status(NOT_FOUND).send({ message: 'Пользователь с указанным _id не найден.' });
+        const error = new Error('Пользователь с указанным _id не найден.');
+        error.statusCode = NOT_FOUND;
+        next(error);
       } else {
         const error = new Error('Ошибка на сервере');
         error.statusCode = SERVER_ERROR;

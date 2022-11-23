@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable import/extensions */
 const CardShema = require('../models/card.js');
@@ -9,22 +10,25 @@ const NOT_FOUND = 404;
 const UNAUTHORIZED = 403;
 
 // Создаем карточку
-module.exports.postCard = (req, res) => {
+module.exports.postCard = (req, res, next) => {
   CardShema.create({ ...req.body, owner: req.user })
     .then((data) => res.status(GOOD_REQUEST).send(data))
     .catch((err) => {
       console.log(err);
       if (err.name === 'ValidationError') {
-        res.status(INCORRECT_DATA).send({ message: 'Переданы некорректные данные при создании карточки.' });
+        const error = new Error('Переданы некорректные данные при создании карточки.');
+        error.statusCode = INCORRECT_DATA;
+        next(error);
       } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка на сервере' });
-        console.log(err);
+        const error = new Error('Ошибка на сервере');
+        error.statusCode = SERVER_ERROR;
+        next(error);
       }
     });
 };
 
 // Удаляем карточку по ид
-module.exports.deleteCard = (req, res) => {
+module.exports.deleteCard = (req, res, next) => {
   CardShema.findById(req.params.cardId)
     .orFail(() => {
       const err = new Error('errorId');
@@ -46,20 +50,27 @@ module.exports.deleteCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'Unauthorized') {
-        res.status(UNAUTHORIZED).send({ message: 'У вас нет прав на удаление этой карточки' });
+        const error = new Error('У вас нет прав на удаление этой карточки');
+        error.statusCode = UNAUTHORIZED;
+        next(error);
       } else if (err.name === 'ResourceNotFound') {
-        res.status(NOT_FOUND).send({ message: 'Карточка с указанным _id не найдена.' });
+        const error = new Error('Карточка с указанным _id не найдена.');
+        error.statusCode = NOT_FOUND;
+        next(error);
       } else if (err.name === 'CastError') {
-        res.status(INCORRECT_DATA).send({ message: 'Переданы некорректные данные при удалении создании карточки.' });
+        const error = new Error('Переданы некорректные данные при удалении создании карточки.');
+        error.statusCode = INCORRECT_DATA;
+        next(error);
       } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка на сервере' });
-        console.log(err);
+        const error = new Error('Ошибка на сервере');
+        error.statusCode = SERVER_ERROR;
+        next(error);
       }
     });
 };
 
 // Ставим лайк карточке
-module.exports.putLike = (req, res) => {
+module.exports.putLike = (req, res, next) => {
   CardShema.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
@@ -79,18 +90,23 @@ module.exports.putLike = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ResourceNotFound') {
-        res.status(NOT_FOUND).send({ message: 'Передан несуществующий _id карточки.' });
+        const error = new Error('Передан несуществующий _id карточки.');
+        error.statusCode = NOT_FOUND;
+        next(error);
       } else if (err.name === 'CastError') {
-        res.status(INCORRECT_DATA).send({ message: 'Переданы некорректные данные для постановки лайка.' });
+        const error = new Error('Переданы некорректные данные для постановки лайка.');
+        error.statusCode = INCORRECT_DATA;
+        next(error);
       } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка на сервере' });
-        console.log(err);
+        const error = new Error('Ошибка на сервере');
+        error.statusCode = SERVER_ERROR;
+        next(error);
       }
     });
 };
 
 // Удаляем лайк у карточки
-module.exports.deleteLike = (req, res) => {
+module.exports.deleteLike = (req, res, next) => {
   CardShema.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } }, //  убрать _id из массива
@@ -110,23 +126,29 @@ module.exports.deleteLike = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(INCORRECT_DATA).send({ message: 'Переданы некорректные данные для снятия лайка.' });
+        const error = new Error('Переданы некорректные данные для снятия лайка.');
+        error.statusCode = INCORRECT_DATA;
+        next(error);
       } else if (err.name === 'ResourceNotFound') {
-        res.status(NOT_FOUND).send({ message: 'Передан несуществующий _id карточки.' });
+        const error = new Error('Передан несуществующий _id карточки.');
+        error.statusCode = NOT_FOUND;
+        next(error);
       } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка на сервере' });
-        console.log(err);
+        const error = new Error('Ошибка на сервере');
+        error.statusCode = SERVER_ERROR;
+        next(error);
       }
     });
 };
 
 // Возвращаем все карточки
-module.exports.getCards = (req, res) => {
+module.exports.getCards = (req, res, next) => {
   CardShema.find({})
     .populate(['owner', 'likes'])
     .then((data) => res.status(GOOD_REQUEST).send(data))
     .catch((err) => {
-      res.status(SERVER_ERROR).send({ message: 'Ошибка на сервере' });
-      console.log(err);
+      const error = new Error('Ошибка на сервере');
+      error.statusCode = SERVER_ERROR;
+      next(error);
     });
 };

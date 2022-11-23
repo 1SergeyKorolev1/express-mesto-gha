@@ -45,14 +45,19 @@ app.use('/users', require('./routes/users.js'));
 app.use('/cards', require('./routes/cards.js'));
 
 // Не существующие запросы
-app.use('/', (req, res) => {
-  res.status(NOT_FOUND).send({ message: 'Такого адреса не существует' });
+app.use('/', (req, res, next) => {
+  const error = new Error('Такого адреса не существует');
+  error.statusCode = NOT_FOUND;
+  next(error);
 });
 
+// Обработчик ошибок Joi
 app.use(errors());
 
+// Централизованный обработчик
 app.use((err, req, res, next) => {
   res.status(err.statusCode).send({ message: err.message });
+  console.log(err);
 });
 
 app.listen(3000, () => {
