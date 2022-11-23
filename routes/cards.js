@@ -8,8 +8,8 @@ const {
 // Создаем карточку
 router.post('/', celebrate({
   body: Joi.object().keys({
+    name: Joi.string().min(2).max(30).required(),
     link: Joi.string().required().pattern(/(http[s]?:\/\/[www.]?\w{1,}((\W\w{1,}){1,})?\.\w{2,}[#$]?)/),
-    name: Joi.string().min(2).max(30),
   }),
 }), postCard);
 
