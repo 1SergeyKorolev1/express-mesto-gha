@@ -40,11 +40,12 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
     minLength: 8,
+    select: false,
   },
 });
 
 userSchema.statics.findUserByCredentials = function (email, password) {
-  return this.findOne({ email })
+  return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
         const err = new Error('error');

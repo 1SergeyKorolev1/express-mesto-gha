@@ -18,17 +18,8 @@ const CONFLICT = 409;
 module.exports.getUsers = (req, res, next) => {
   UserSchema.find({})
     .then((data) => {
-      const users = [];
-      data.forEach((item) => {
-        const {
-          email, name, about, avatar,
-        } = item;
-        users.push({
-          email, name, about, avatar,
-        });
-      });
       res.status(GOOD_REQUEST).send({
-        users,
+        data,
       });
     })
     .catch((err) => {
@@ -47,11 +38,8 @@ module.exports.getUserMe = (req, res, next) => {
         err.name = 'ResourceNotFound';
         throw err;
       } else {
-        const {
-          email, name, about, avatar,
-        } = data;
         res.status(GOOD_REQUEST).send({
-          email, name, about, avatar,
+          data,
         });
       }
     })
@@ -79,11 +67,8 @@ module.exports.getUser = (req, res, next) => {
         err.name = 'ResourceNotFound';
         throw err;
       } else {
-        const {
-          email, name, about, avatar,
-        } = data;
         res.status(GOOD_REQUEST).send({
-          email, name, about, avatar,
+          data,
         });
       }
     })
@@ -119,10 +104,10 @@ module.exports.postUser = (req, res, next) => {
       })
         .then((data) => {
           const {
-            email, name, about, avatar,
+            email, name, about, avatar, _id,
           } = data;
           res.status(GOOD_REQUEST).send({
-            email, name, about, avatar,
+            email, name, about, avatar, _id,
           });
         })
         .catch((err) => {
@@ -146,6 +131,7 @@ module.exports.postUser = (req, res, next) => {
 // Вход - авторизация
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
+  console.log(req.body);
 
   return UserSchema.findUserByCredentials(email, password)
     .then((user) => {
@@ -190,11 +176,8 @@ module.exports.patchUser = (req, res, next) => {
         err.name = 'ResourceNotFound';
         throw err;
       } else {
-        const {
-          email, name, about, avatar,
-        } = data;
         res.status(GOOD_REQUEST).send({
-          email, name, about, avatar,
+          data,
         });
       }
     })
@@ -231,11 +214,8 @@ module.exports.patchAvatar = (req, res, next) => {
         err.name = 'ResourceNotFound';
         throw err;
       } else {
-        const {
-          email, name, about, avatar,
-        } = data;
         res.status(GOOD_REQUEST).send({
-          email, name, about, avatar,
+          data,
         });
       }
     })
