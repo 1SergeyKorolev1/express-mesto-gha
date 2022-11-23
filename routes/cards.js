@@ -6,7 +6,12 @@ const {
 } = require('../controllers/cards.js');
 
 // Создаем карточку
-router.post('/', postCard);
+router.post('/', celebrate({
+  body: Joi.object().keys({
+    link: Joi.string().required().pattern(/(http[s]?:\/\/[www.]?\w{1,}((\W\w{1,}){1,})?\.\w{2,}[#$]?)/),
+    name: Joi.string().min(2).max(30),
+  }),
+}), postCard);
 
 // Удаляем карточку по ид
 router.delete('/:cardId', celebrate({
