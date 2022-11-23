@@ -18,9 +18,9 @@ const CONFLICT = 409;
 module.exports.getUsers = (req, res, next) => {
   UserSchema.find({})
     .then((data) => {
-      res.status(GOOD_REQUEST).send({
+      res.status(GOOD_REQUEST).send(
         data,
-      });
+      );
     })
     .catch((err) => {
       const error = new Error('Ошибка на сервере');
