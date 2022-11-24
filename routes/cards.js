@@ -1,9 +1,8 @@
-/* eslint-disable import/extensions */
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 const {
   postCard, deleteCard, putLike, deleteLike, getCards,
-} = require('../controllers/cards.js');
+} = require('../controllers/cards');
 
 // Создаем карточку
 router.post('/', celebrate({
