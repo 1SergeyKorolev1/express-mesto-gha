@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-console */
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const UserSchema = require('../models/user');
@@ -20,7 +17,7 @@ module.exports.getUsers = (req, res, next) => {
         data,
       );
     })
-    .catch((err) => {
+    .catch(() => {
       const error = new Error('Ошибка на сервере');
       error.statusCode = SERVER_ERROR;
       next(error);
@@ -129,7 +126,6 @@ module.exports.postUser = (req, res, next) => {
 // Вход - авторизация
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
-  console.log(req.body);
 
   return UserSchema.findUserByCredentials(email, password)
     .then((user) => {
