@@ -14,7 +14,6 @@ module.exports.postCard = (req, res, next) => {
   CardShema.create({ ...req.body, owner: req.user })
     .then((data) => res.status(GOOD_REQUEST).send(data))
     .catch((err) => {
-      console.log(err);
       if (err.name === 'ValidationError') {
         const error = new Error('Переданы некорректные данные при создании карточки.');
         error.statusCode = INCORRECT_DATA;
