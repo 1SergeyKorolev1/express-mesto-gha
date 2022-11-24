@@ -1,10 +1,10 @@
 const CardShema = require('../models/card');
+const ServerError = require('../errors/server-error');
+const Unauthorized = require('../errors/unauthorized');
+const NotFound = require('../errors/not-found');
+const IncorrectData = require('../errors/incorrect-data');
 
 const GOOD_REQUEST = 200;
-const INCORRECT_DATA = 400;
-const SERVER_ERROR = 500;
-const NOT_FOUND = 404;
-const UNAUTHORIZED = 403;
 
 // Создаем карточку
 module.exports.postCard = (req, res, next) => {
@@ -12,12 +12,10 @@ module.exports.postCard = (req, res, next) => {
     .then((data) => res.status(GOOD_REQUEST).send(data))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        const error = new Error('Переданы некорректные данные при создании карточки.');
-        error.statusCode = INCORRECT_DATA;
+        const error = new IncorrectData('Переданы некорректные данные при создании карточки.');
         next(error);
       } else {
-        const error = new Error('Ошибка на сервере');
-        error.statusCode = SERVER_ERROR;
+        const error = new ServerError('Ошибка на сервере');
         next(error);
       }
     });
@@ -46,20 +44,16 @@ module.exports.deleteCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'Unauthorized') {
-        const error = new Error('У вас нет прав на удаление этой карточки');
-        error.statusCode = UNAUTHORIZED;
+        const error = new Unauthorized('У вас нет прав на удаление этой карточки');
         next(error);
       } else if (err.name === 'ResourceNotFound') {
-        const error = new Error('Карточка с указанным _id не найдена.');
-        error.statusCode = NOT_FOUND;
+        const error = new NotFound('Карточка с указанным _id не найдена.');
         next(error);
       } else if (err.name === 'CastError') {
-        const error = new Error('Переданы некорректные данные при удалении создании карточки.');
-        error.statusCode = INCORRECT_DATA;
+        const error = new IncorrectData('Переданы некорректные данные при удалении создании карточки.');
         next(error);
       } else {
-        const error = new Error('Ошибка на сервере');
-        error.statusCode = SERVER_ERROR;
+        const error = new ServerError('Ошибка на сервере');
         next(error);
       }
     });
@@ -86,16 +80,13 @@ module.exports.putLike = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ResourceNotFound') {
-        const error = new Error('Передан несуществующий _id карточки.');
-        error.statusCode = NOT_FOUND;
+        const error = new NotFound('Передан несуществующий _id карточки.');
         next(error);
       } else if (err.name === 'CastError') {
-        const error = new Error('Переданы некорректные данные для постановки лайка.');
-        error.statusCode = INCORRECT_DATA;
+        const error = new IncorrectData('Переданы некорректные данные для постановки лайка.');
         next(error);
       } else {
-        const error = new Error('Ошибка на сервере');
-        error.statusCode = SERVER_ERROR;
+        const error = new ServerError('Ошибка на сервере');
         next(error);
       }
     });
@@ -122,16 +113,13 @@ module.exports.deleteLike = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        const error = new Error('Переданы некорректные данные для снятия лайка.');
-        error.statusCode = INCORRECT_DATA;
+        const error = new IncorrectData('Переданы некорректные данные для снятия лайка.');
         next(error);
       } else if (err.name === 'ResourceNotFound') {
-        const error = new Error('Передан несуществующий _id карточки.');
-        error.statusCode = NOT_FOUND;
+        const error = new NotFound('Передан несуществующий _id карточки.');
         next(error);
       } else {
-        const error = new Error('Ошибка на сервере');
-        error.statusCode = SERVER_ERROR;
+        const error = new ServerError('Ошибка на сервере');
         next(error);
       }
     });
@@ -143,8 +131,7 @@ module.exports.getCards = (req, res, next) => {
     .populate(['owner', 'likes'])
     .then((data) => res.status(GOOD_REQUEST).send(data))
     .catch(() => {
-      const error = new Error('Ошибка на сервере');
-      error.statusCode = SERVER_ERROR;
+      const error = new ServerError('Ошибка на сервере');
       next(error);
     });
 };
