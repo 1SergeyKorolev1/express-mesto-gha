@@ -3,7 +3,6 @@
 /* eslint-disable no-console */
 /* eslint-disable import/extensions */
 const bcrypt = require('bcryptjs');
-const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const UserSchema = require('../models/user.js');
 
