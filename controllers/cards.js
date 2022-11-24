@@ -1,7 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
-/* eslint-disable import/extensions */
-const CardShema = require('../models/card.js');
+const CardShema = require('../models/card');
 
 const GOOD_REQUEST = 200;
 const INCORRECT_DATA = 400;
@@ -145,7 +142,7 @@ module.exports.getCards = (req, res, next) => {
   CardShema.find({})
     .populate(['owner', 'likes'])
     .then((data) => res.status(GOOD_REQUEST).send(data))
-    .catch((err) => {
+    .catch(() => {
       const error = new Error('Ошибка на сервере');
       error.statusCode = SERVER_ERROR;
       next(error);
