@@ -1,9 +1,8 @@
-/* eslint-disable import/extensions */
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 const {
   getUsers, getUser, patchUser, patchAvatar, getUserMe,
-} = require('../controllers/users.js');
+} = require('../controllers/users');
 
 // Возвращаем всех пользователей
 router.get('/', getUsers);

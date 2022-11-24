@@ -1,10 +1,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
-/* eslint-disable import/extensions */
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const UserSchema = require('../models/user.js');
+const UserSchema = require('../models/user');
 
 const GOOD_REQUEST = 200;
 const INCORRECT_DATA = 400;

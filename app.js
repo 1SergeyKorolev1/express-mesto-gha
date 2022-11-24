@@ -1,13 +1,11 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
-/* eslint-disable import/extensions */
 const expres = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { celebrate, Joi, errors } = require('celebrate');
 const {
   login, postUser,
-} = require('./controllers/users.js');
+} = require('./controllers/users');
 const auth = require('./middlewares/auth');
 
 const NOT_FOUND = 404;
@@ -40,12 +38,12 @@ app.post('/signup', celebrate({
 app.use(auth);
 
 // Все запросы на /users
-app.use('/users', require('./routes/users.js'));
+app.use('/users', require('./routes/users'));
 // Все запросы на /cards
-app.use('/cards', require('./routes/cards.js'));
+app.use('/cards', require('./routes/cards'));
 
 // Не существующие запросы
-app.use('/', (req, res, next) => {
+app.use('/', (next) => {
   const error = new Error('Такого адреса не существует');
   error.statusCode = NOT_FOUND;
   next(error);
@@ -55,9 +53,8 @@ app.use('/', (req, res, next) => {
 app.use(errors());
 
 // Централизованный обработчик
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   res.status(err.statusCode).send({ message: err.message });
-  console.log(err);
 });
 
 app.listen(3000, () => {
