@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-escape */
 /* eslint-disable func-names */
 const validator = require('validator');
 const mongoose = require('mongoose');
@@ -24,7 +23,7 @@ const userSchema = mongoose.Schema({
     type: String,
     validate: {
       validator(v) {
-        return /http[s]?:\/\/[www.]?\w{1,}((\W\w{1,}){1,})?\.\w{2,}[\#$]?/gi.test(v);
+        return /http[s]?:\/\/[www.]?\w{1,}((\W\w{1,}){1,})?\.\w{2,}[#$]?/gi.test(v);
       },
       message: (props) => `${props.value} is not a valid link!`,
     },
@@ -39,7 +38,7 @@ const userSchema = mongoose.Schema({
       validator(v) {
         return validator.isEmail(v);
       },
-      message: (props) => `${props.value} is not a valid link!`,
+      message: (props) => `${props.value} is not a valid email!`,
     },
   },
 
