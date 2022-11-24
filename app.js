@@ -43,7 +43,7 @@ app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));
 
 // Не существующие запросы
-app.use('/', (next) => {
+app.use('/', (req, res, next) => {
   const error = new Error('Такого адреса не существует');
   error.statusCode = NOT_FOUND;
   next(error);
@@ -53,7 +53,7 @@ app.use('/', (next) => {
 app.use(errors());
 
 // Централизованный обработчик
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   res.status(err.statusCode).send({ message: err.message });
 });
 
