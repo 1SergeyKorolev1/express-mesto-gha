@@ -12,7 +12,7 @@ router.get('/me', getUserMe);
 // Возвращаем пользователя по ид
 router.get('/:userId', celebrate({
   params: Joi.object().keys({
-    userId: Joi.string().alphanum().length(24),
+    userId: Joi.string().alphanum().length(24).hex(),
   }),
 }), getUser);
 // Обновляем профиль
