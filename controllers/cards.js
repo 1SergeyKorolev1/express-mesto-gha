@@ -1,8 +1,8 @@
 const CardShema = require('../models/card');
 const ServerError = require('../errors/server-error');
-const Unauthorized = require('../errors/unauthorized');
 const NotFound = require('../errors/not-found');
 const IncorrectData = require('../errors/incorrect-data');
+const Forbidden = require('../errors/forbidden')
 
 const GOOD_REQUEST = 200;
 
@@ -44,7 +44,7 @@ module.exports.deleteCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'Unauthorized') {
-        const error = new Unauthorized('У вас нет прав на удаление этой карточки');
+        const error = new Forbidden('У вас нет прав на удаление этой карточки');
         next(error);
       } else if (err.name === 'ResourceNotFound') {
         const error = new NotFound('Карточка с указанным _id не найдена.');
