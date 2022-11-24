@@ -2,7 +2,7 @@ const CardShema = require('../models/card');
 const ServerError = require('../errors/server-error');
 const NotFound = require('../errors/not-found');
 const IncorrectData = require('../errors/incorrect-data');
-const Forbidden = require('../errors/forbidden')
+const Forbidden = require('../errors/forbidden');
 
 const GOOD_REQUEST = 200;
 

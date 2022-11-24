@@ -7,8 +7,7 @@ const {
   login, postUser,
 } = require('./controllers/users');
 const auth = require('./middlewares/auth');
-
-const NOT_FOUND = 404;
+const NotFound = require('./errors/not-found');
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
@@ -44,8 +43,7 @@ app.use('/cards', require('./routes/cards'));
 
 // Не существующие запросы
 app.use('/', (req, res, next) => {
-  const error = new Error('Такого адреса не существует');
-  error.statusCode = NOT_FOUND;
+  const error = new NotFound('Такого адреса не существует');
   next(error);
 });
 
