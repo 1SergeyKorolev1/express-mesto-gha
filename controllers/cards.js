@@ -29,7 +29,6 @@ module.exports.deleteCard = (req, res, next) => {
       err.name = 'ResourceNotFound';
       throw err;
     })
-    .populate('owner')
     .then((data) => {
       if (req.user._id !== data.owner._id.toString()) {
         const err = new Error('errorId');

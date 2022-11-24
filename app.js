@@ -1,4 +1,8 @@
 /* eslint-disable no-console */
+/* TODO: Благодарю за топовые коменты - Хотел уточнить почему не убираю populate -
+ меня предыдущий ревьюер попросил оставить его при выводе всех карточек - 2-ой вызов убрал
+ (вдруг дальше в работе пригодится - если нет уберу!) */
+
 const expres = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
